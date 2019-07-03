@@ -1,7 +1,8 @@
 
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 # Flask used to create app
 # render_template used to render an html file instead of inline html
+# url_for for easy refrencing, vs specifing specific file location
 
 app = Flask(__name__)
 
