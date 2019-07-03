@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html>
     <head>
-
+        {% if title %}
+        <!-- If we have data for title obj, then use it -->
+            <title>Flask Blog - {{ title }}</title>
+        {% else %}
+            <title>Flask Blog</title>
+        {% endif %}
     </head>
     <body>
         <h1>About Page</h1>
