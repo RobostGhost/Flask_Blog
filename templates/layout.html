@@ -1,0 +1,16 @@
+<!-- Using inheritance to remove repeated html stuff -->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        {% if title %}
+        <!-- If we have data for title obj, then use it -->
+            <title>Flask Blog - {{ title }}</title>
+        {% else %}
+            <title>Flask Blog</title>
+        {% endif %}
+    </head>
+    <body>
+        {% block content %}{% endblock %}
+    </body>
+</html>
