@@ -1,5 +1,6 @@
 
 from flask import Flask, render_template, url_for
+from forms import RegistrationForm, LoginForm
 # Flask used to create app
 # render_template used to render an html file instead of inline html
 # url_for for easy refrencing, vs specifing specific file location
@@ -36,6 +37,16 @@ def home():
 @app.route("/about")
 def about():
     return render_template("about.html", title="About")
+
+@app.route("/register")
+def register():
+    form = RegistrationForm()
+    return render_template('register.html', title='Register', form=form)
+
+@app.route("/login")
+def login():
+    form = LoginForm()
+    return render_template('login.html', title='Login', form=form)
 
 
 # Makes sure app runs in debug
