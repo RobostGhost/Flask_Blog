@@ -6,6 +6,10 @@ from flask import Flask, render_template, url_for
 
 app = Flask(__name__)
 
+# used for protection (ex: cookie modification)
+# token generated using secrets.token_hex()
+app.config['SECRET_KEY'] = '7fec327b7e1da6f8b90966f78d7372d1'
+
 # python dictionary representing post data
 posts = [
     {
