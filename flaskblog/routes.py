@@ -1,5 +1,5 @@
 from flask import render_template, url_for, flash, redirect
-from flaskblog import app
+from flaskblog import app, db, bcrypt
 from flaskblog.forms import RegistrationForm, LoginForm
 from flaskblog.models import User, Post
 # render_template used to render an html file instead of inline html
@@ -36,8 +36,14 @@ def about():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        flash(f'Accont created for {form.username.data}!', 'success')
-        return redirect(url_for('home'))
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user_to_register = User(username=form.username.data, email=form.email.data, password=hashed_password)
+
+        db.session.add(user_to_register)
+        db.session.commit()
+
+        flash(f'Account Created! You can now login.', 'success')
+        return redirect(url_for('login'))
 
     return render_template('register.html', title='Register', form=form)
 
