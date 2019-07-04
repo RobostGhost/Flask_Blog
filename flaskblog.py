@@ -1,15 +1,25 @@
 
 from flask import Flask, render_template, url_for, flash, redirect
+from flask_sqlalchemy import SQLAlchemy
 from forms import RegistrationForm, LoginForm
 # Flask used to create app
 # render_template used to render an html file instead of inline html
 # url_for for easy refrencing, vs specifing specific file location
+# SQLAlchemy for database
+
 
 app = Flask(__name__)
+
 
 # used for protection (ex: cookie modification)
 # token generated using secrets.token_hex()
 app.config['SECRET_KEY'] = '7fec327b7e1da6f8b90966f78d7372d1'
+# /// indicates relative path, where the sb will be stored
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+
+# Getting the db
+db = SQLAlchemy(app)
+
 
 # python dictionary representing post data
 posts = [
