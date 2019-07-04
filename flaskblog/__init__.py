@@ -1,0 +1,1 @@
+#  Package structure, where app will initialize
