@@ -55,11 +55,16 @@ def login():
     if form.validate_on_submit():
         existing_user = User.query.filter_by(email=form.email.data).first()
 
-        if existing_user and bcrypt.check_password_hash(existing_user.password, form.password.data):
+        if existing_user is None:
+            flash('Failed to Login! Email is not registered.', 'danger')
+            return redirect(url_for('login'))
+
+        if bcrypt.check_password_hash(existing_user.password, form.password.data):
             login_user(existing_user, remember=form.remember.data)
+            flash(f'Welcome back {existing_user.username}!', 'success')
             return redirect(url_for('home'))
         else:
-            flash('Failed to Login! Please try again.', 'danger')
+            flash('Failed to Login! Incorrect password.', 'danger')
 
         return redirect(url_for('login'))
             
