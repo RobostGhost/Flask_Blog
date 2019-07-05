@@ -2,6 +2,7 @@ from flask import render_template, url_for, flash, redirect
 from flaskblog import app, db, bcrypt
 from flaskblog.forms import RegistrationForm, LoginForm
 from flaskblog.models import User, Post
+from flask_login import login_user
 # render_template used to render an html file instead of inline html
 # url_for for easy refrencing, vs specifing specific file location
 
@@ -51,16 +52,15 @@ def register():
 def login():
     form = LoginForm()
 
-    # temp fake accepted data to test form
-    fake_accepted_email = 'admin@blog.com'
-    fake_accepted_password = 'password123'
-
     if form.validate_on_submit():
-        if form.email.data == fake_accepted_email and form.password.data == fake_accepted_password:
-            flash('You are logged in!', 'success')
+        existing_user = User.query.filter_by(email=form.email.data).first()
+
+        if existing_user and bcrypt.check_password_hash(existing_user.password, form.password.data):
+            login_user(existing_user, remember=form.remember.data)
             return redirect(url_for('home'))
         else:
             flash('Failed to Login! Please try again.', 'danger')
-            return redirect(url_for('home'))
+
+        return redirect(url_for('login'))
             
     return render_template('login.html', title='Login', form=form)
