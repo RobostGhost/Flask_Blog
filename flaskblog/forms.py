@@ -1,5 +1,6 @@
 # installed flask-wtf using pip
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, ValidationError
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 from flaskblog.models import User
@@ -58,6 +59,9 @@ class UpdateAccountForm(FlaskForm):
     email = StringField('Email', 
                         validators=[DataRequired(), 
                                     Email()])
+
+    picture = FileField('Update Profile Picture', 
+                        validators=[FileAllowed(['jpg', 'png', 'gif'])])
 
     submit = SubmitField('Update')
 
