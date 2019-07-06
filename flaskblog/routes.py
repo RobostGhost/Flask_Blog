@@ -1,5 +1,6 @@
 import secrets
 import os
+from PIL import Image
 from flask import render_template, url_for, flash, redirect, request
 from flaskblog import app, db, bcrypt
 from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm
@@ -94,7 +95,12 @@ def save_picture(form_picture):
 
     # app.root_path gives us the path to our app
     picture_path = os.path.join(app.root_path, 'static/profile_pics/', picture_f_name)
-    form_picture.save(picture_path)
+    
+    # resize image to smaller size and then save it, saves size and prevents slow down of site
+    output_size = (125, 125)
+    resized_picture = Image.open(form_picture)
+    resized_picture.thumbnail(output_size)
+    resized_picture.save(picture_path)
 
     return picture_f_name
 
@@ -103,6 +109,7 @@ def save_picture(form_picture):
 def account():
     form = UpdateAccountForm()
     if form.validate_on_submit():
+        # TODO maybe add profile pic clean up
         # profile pic update
         if form.picture.data:
             picture_f_name = save_picture(form.picture.data)
