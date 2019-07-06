@@ -1,3 +1,10 @@
+# generated stuff
 __pycache__/
 .vscode/
+
+# the db
 site.db
+
+# profile pictures generated when a user changes it
+flaskblog/static/profile_pics/*
+!flaskblog/static/profile_pics/default.png
