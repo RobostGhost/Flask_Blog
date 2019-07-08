@@ -16,7 +16,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 def home():
     # if nothing in url, simply use first page, type pervents weird args from being read
     page = request.args.get('page', 1, type=int)
-    posts = Post.query.paginate(per_page=5, page=page)
+    posts = Post.query.order_by(Post.date_posted.desc()).paginate(per_page=5, page=page)
     return render_template("home.html", posts=posts)
 
 @app.route("/about")
