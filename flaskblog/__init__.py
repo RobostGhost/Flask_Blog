@@ -1,8 +1,10 @@
 #  Package structure, where app will initialize
+import os
 from flask import Flask # creates the app
 from flask_sqlalchemy import SQLAlchemy # create db
 from flask_bcrypt import Bcrypt # for hashing
 from flask_login import LoginManager # manages login sessions
+from flask_mail import Mail # for sending mail
 
 
 app = Flask(__name__)
@@ -21,6 +23,14 @@ bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login' # refers to our login page route func
 login_manager.login_message_category = 'info'
+# setup mail server
+app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
+app.config['MAIL_PORT'] = '587'
+app.config['MAIL_USE_TLS'] = True
+# Using user set environmental vars to ensure info not in code
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_EMAIL')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASS')
+mail = Mail(app)
 
 # initialize routes
 from flaskblog import routes
