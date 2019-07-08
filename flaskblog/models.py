@@ -24,7 +24,7 @@ class Post(db.Model):
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow) # date time function is passed, not run
     content = db.Column(db.Text, nullable=False)
     # foreign key to user table
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) # hash of password
-
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    
     def __repr__(self):
         return f"Post('{self.title}', '{self.date_posted}')"
