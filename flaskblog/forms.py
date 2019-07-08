@@ -84,7 +84,19 @@ class UpdateAccountForm(FlaskForm):
         if existing_email:
             raise ValidationError('This email is already taken. Please choose a different one.')
 
+
 class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
     submit = SubmitField('Post')
+
+
+class RequestResetForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Request Password Reset')
+
+    def validate_email(self, email):
+        existing_email = User.query.filter_by(email=email.data).first()
+        
+        if existing_email is None:
+            raise ValidationError('No Account uses this email.')
