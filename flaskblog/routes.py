@@ -107,6 +107,7 @@ def account():
         flash('Account Updated!', 'success')
         return redirect(url_for('account')) # ensures a GET once return to page
     elif request.method == 'GET':
+        # Pre-fill user information
         form.username.data = current_user.username
         form.email.data = current_user.email
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
@@ -122,7 +123,7 @@ def new_post():
         db.session.commit()
         flash('Post has been created', 'success')
         return redirect(url_for('home'))
-    return render_template('create_post.html', title='New Post', form=form)
+    return render_template('create_post.html', title='New Post', form=form, legend='New Post')
 
 @app.route("/post/<int:post_id>", methods=['GET', 'POST'])
 def post(post_id):
@@ -139,6 +140,15 @@ def update_post(post_id):
         abort(403)
 
     form = PostForm()
-
-    return render_template('create_post.html', title=f"Update {post.title}", 
-                            form=form, post=post)
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.content = form.content.data
+        db.session.commit()
+        flash('Your post has now been updated!', 'success')
+        return redirect(url_for('post', post_id=post.id))
+    elif request.method == 'GET':
+        form.title.data = post.title
+        form.content.data = post.content
+        
+    return render_template('create_post.html', title='Update Post', 
+                            form=form, legend='Update Post')
