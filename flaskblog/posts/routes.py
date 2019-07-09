@@ -1,6 +1,14 @@
-from flask import Blueprint
+from flask import Blueprint, render_template, url_for, flash, redirect, request, abort
+from flaskblog import db
+from flaskblog.posts.forms import PostForm
+from flaskblog.models import Post
+from flask_login import current_user, login_required
+# render_template used to render an html file instead of inline html
+# url_for for easy refrencing, vs specifing specific file location
+
 
 posts = Blueprint('posts', __name__)
+
 
 @posts.route("/post/new", methods=['GET', 'POST'])
 @login_required
