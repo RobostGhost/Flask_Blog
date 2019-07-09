@@ -1,8 +1,8 @@
 import secrets
 import os
 from PIL import Image
-from flask import url_for
-from flaskblog import app, mail
+from flask import url_for, current_app
+from flaskblog import mail
 from flask_mail import Message
 
 
@@ -12,7 +12,7 @@ def save_picture(form_picture):
     picture_f_name = random_hex_for_pic_name + f_ext
 
     # app.root_path gives us the path to our app
-    picture_path = os.path.join(app.root_path, 'static/profile_pics/', picture_f_name)
+    picture_path = os.path.join(current_app.root_path, 'static/profile_pics/', picture_f_name)
     
     # resize image to smaller size and then save it, saves size and prevents slow down of site
     output_size = (125, 125)
