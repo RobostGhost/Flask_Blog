@@ -34,9 +34,9 @@ mail = Mail(app)
 
 
 # initialize routes using Blueprints
-from flaskblog.users.routes import main
+from flaskblog.main.routes import main
 from flaskblog.users.routes import users
-from flaskblog.users.routes import posts
+from flaskblog.posts.routes import posts
 
 app.register_blueprint(main)
 app.register_blueprint(users)
