@@ -7,27 +7,35 @@ from flask_mail import Mail # for sending mail
 from flaskblog.config import Config
 
 
-app = Flask(__name__)
-app.config.from_object(Config)
-
-
 # setup the db
-db = SQLAlchemy(app)
+db = SQLAlchemy()
 # setup for password hasher
-bcrypt = Bcrypt(app)
+bcrypt = Bcrypt()
 # setup login manager
-login_manager = LoginManager(app)
+login_manager = LoginManager()
 login_manager.login_view = 'users.login' # refers to our login page route func
 login_manager.login_message_category = 'info'
 
-mail = Mail(app)
+mail = Mail()
 
+# Initialize the app wih a function instead
+# Allowing multiple instances
+def create_app(config_class=Config):
+    app = Flask(__name__)
+    app.config.from_object(config_class)
 
-# initialize routes using Blueprints
-from flaskblog.main.routes import main
-from flaskblog.users.routes import users
-from flaskblog.posts.routes import posts
+    db.init_app(app)
+    bcrypt.init_app(app)
+    login_manager.init_app(app)
+    mail.init_app(app)
 
-app.register_blueprint(main)
-app.register_blueprint(users)
-app.register_blueprint(posts)
+    # initialize routes using Blueprints
+    from flaskblog.main.routes import main
+    from flaskblog.users.routes import users
+    from flaskblog.posts.routes import posts
+
+    app.register_blueprint(main)
+    app.register_blueprint(users)
+    app.register_blueprint(posts)
+
+    return app
