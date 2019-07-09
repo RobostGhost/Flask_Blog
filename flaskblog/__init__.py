@@ -21,7 +21,7 @@ db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 # setup login manager
 login_manager = LoginManager(app)
-login_manager.login_view = 'login' # refers to our login page route func
+login_manager.login_view = 'users.login' # refers to our login page route func
 login_manager.login_message_category = 'info'
 # setup mail server
 app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
