@@ -29,7 +29,7 @@ def send_reset_email(user):
                    recipients=[user.email])
     # _external gives a non relative url
     msg.body = f'''To reset your password, click the link below:
-    {url_for('reset_token', token=token, _external=True)}
+    {url_for('users.reset_token', token=token, _external=True)}
 
     If you didn't make this request, ignore and delete the email and no changes will be made.
     '''

@@ -44,14 +44,14 @@
 
                 <small class="text-muted ml-2">
                     <!-- TODO add forgot password functionality -->
-                    <a href="{{ url_for('reset_request') }}">Forgot Password?</a>
+                    <a href="{{ url_for('users.reset_request') }}">Forgot Password?</a>
                 </small>
             </div>
         </form>
     </div>
     <div class="border-top pt-3">
         <small class="text-muted">
-            Need an account? <a class="ml-2" href="{{ url_for('register') }}">Register Here</a>
+            Need an account? <a class="ml-2" href="{{ url_for('users.register') }}">Register Here</a>
         </small>
     </div>
 {% endblock content %}
