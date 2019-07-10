@@ -1,36 +1,41 @@
 #  Package structure, where app will initialize
-import os
 from flask import Flask # creates the app
 from flask_sqlalchemy import SQLAlchemy # create db
 from flask_bcrypt import Bcrypt # for hashing
 from flask_login import LoginManager # manages login sessions
 from flask_mail import Mail # for sending mail
+from flaskblog.config import Config
 
-
-app = Flask(__name__)
-
-
-# used for protection (ex: cookie modification), token generated using secrets.token_hex()
-app.config['SECRET_KEY'] = '7fec327b7e1da6f8b90966f78d7372d1'
-# /// indicates relative path, where the sb will be stored
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 
 # setup the db
-db = SQLAlchemy(app)
+db = SQLAlchemy()
 # setup for password hasher
-bcrypt = Bcrypt(app)
+bcrypt = Bcrypt()
 # setup login manager
-login_manager = LoginManager(app)
-login_manager.login_view = 'login' # refers to our login page route func
+login_manager = LoginManager()
+login_manager.login_view = 'users.login' # refers to our login page route func
 login_manager.login_message_category = 'info'
-# setup mail server
-app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
-app.config['MAIL_PORT'] = '587'
-app.config['MAIL_USE_TLS'] = True
-# Using user set environmental vars to ensure info not in code
-app.config['MAIL_USERNAME'] = os.environ.get('MAIL_EMAIL')
-app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASS')
-mail = Mail(app)
 
-# initialize routes
-from flaskblog import routes
+mail = Mail()
+
+# Initialize the app wih a function instead
+# Allowing multiple instances
+def create_app(config_class=Config):
+    app = Flask(__name__)
+    app.config.from_object(config_class)
+
+    db.init_app(app)
+    bcrypt.init_app(app)
+    login_manager.init_app(app)
+    mail.init_app(app)
+
+    # initialize routes using Blueprints
+    from flaskblog.main.routes import main
+    from flaskblog.users.routes import users
+    from flaskblog.posts.routes import posts
+
+    app.register_blueprint(main)
+    app.register_blueprint(users)
+    app.register_blueprint(posts)
+
+    return app

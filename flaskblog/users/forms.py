@@ -1,10 +1,11 @@
 # installed flask-wtf using pip
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, ValidationError, TextAreaField
-from wtforms.validators import DataRequired, Length, Email, EqualTo
+from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from flaskblog.models import User
 from flask_login import current_user
+
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', 
@@ -85,12 +86,6 @@ class UpdateAccountForm(FlaskForm):
             raise ValidationError('This email is already taken. Please choose a different one.')
 
 
-class PostForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    content = TextAreaField('Content', validators=[DataRequired()])
-    submit = SubmitField('Post')
-
-
 class RequestResetForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Request Password Reset')
@@ -100,6 +95,7 @@ class RequestResetForm(FlaskForm):
         
         if existing_email is None:
             raise ValidationError('No Account uses this email.')
+
 
 class ResetPasswordForm(FlaskForm):
     password = PasswordField('Password', 
